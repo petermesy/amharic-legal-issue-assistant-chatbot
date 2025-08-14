@@ -1,7 +1,5 @@
-PyPDF2
-langchain
-langchain-community
-faiss-cpu
-transformers
-sentence-transformers
 streamlit
+sentence-transformers
+numpy
+google-generativeai
+torch
