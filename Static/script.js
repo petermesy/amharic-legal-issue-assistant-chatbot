@@ -81,7 +81,39 @@ function startNewChat() {
         .then(() => window.location.href = "/"); // safer than reload()
 }
 
+function renderChatHistory(history) {
+    chatArea.innerHTML = ""; // clear old chat
+    history.forEach(msg => {
+        const div = document.createElement("div");
+        div.className = msg.role === "user" ? "user-msg" : "bot-msg";
+        div.textContent = msg.text;
+        chatArea.appendChild(div);
+    });
+    scrollToBottom();
+}
+
 // Load a previous chat session
 function loadChat(index) {
-    window.location.href = `/load_chat/${index}`;
+    fetch(`/load_chat/${index}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.chat_history) {
+                renderChatHistory(data.chat_history);
+            }
+        })
+        .catch(err => console.error("Error loading chat:", err));
+}
+
+function clearAllChats() {
+    if (!confirm("Are you sure you want to clear all chat history?")) return;
+
+    fetch("/clear_chats", { method: "POST" })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                chatArea.innerHTML = ""; // clear chat area
+                location.reload();       // reload sidebar
+            }
+        })
+        .catch(err => console.error("Error clearing chats:", err));
 }

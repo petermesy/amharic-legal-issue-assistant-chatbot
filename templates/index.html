@@ -8,6 +8,7 @@
 <body>
     <div class="sidebar">
         <button onclick="startNewChat()">+ አዲስ ውይይት</button>
+        <button onclick="clearAllChats()" style="margin-bottom:15px; background:#e53e3e;">🗑 ሁሉን አጥፋ</button>
         <h2>የታሪክ ውይይቶች</h2>
         <ul>
         {% if chat_previews %}
@@ -20,8 +21,8 @@
             <li style="opacity:0.6">No saved chats yet</li>
         {% endif %}
         </ul>
-
     </div>
+
 
     <div class="main">
         <div id="chat-area" class="chat-area">

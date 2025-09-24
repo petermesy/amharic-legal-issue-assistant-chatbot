@@ -123,8 +123,17 @@ def load_chat(index):
     sessions = session.get("chat_sessions", [])
     if 0 <= index < len(sessions):
         session["chat_history"] = deepcopy(sessions[index])
+        session.modified = True
+        return {"chat_history": session["chat_history"]}
+    return {"chat_history": []}, 404
+
+@app.route("/clear_chats", methods=["POST"])
+def clear_chats():
+    session["chat_sessions"] = []
+    session["chat_history"] = []
     session.modified = True
-    return redirect(url_for("index"))
+    return {"status": "success"}
+
 
 if __name__ == "__main__":
     app.run(debug=True)
