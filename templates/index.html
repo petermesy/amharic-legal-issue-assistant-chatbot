@@ -2,164 +2,29 @@
 <html lang="am">
 <head>
     <meta charset="UTF-8">
-    <title>Amharic Legal Issue QA Chatbot</title>
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #ececf1;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            width: 100%;
-            max-width: 700px;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-            min-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 220px;
-            height: 70px;
-            background: #1976d2;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            font-size: 1.3em;
-            font-weight: 600;
-            box-shadow: 2px 0 8px rgba(25, 118, 210, 0.08);
-            letter-spacing: 1px;
-            z-index: 10;
-            border-radius: 0 0 16px 0;
-            padding-left: 32px;
-        }
-        .container {
-            position: relative;
-            margin-top: 70px;
-            margin-left: 0;
-            max-width: 700px;
-            background: #f3f4f8;
-        }
-        #chat-area {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding: 24px 12px 100px 12px;
-            background: #f7f7fa;
-        }
-        .user-msg {
-            background: #d2f7e6;
-            color: #222;
-            padding: 12px 18px;
-            margin: 4px 0;
-            border-radius: 18px 18px 4px 18px;
-            max-width: 80%;
-            margin-left: auto;
-            text-align: right;
-            font-size: 1.08em;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .bot-msg {
-            background: #e3e6f7;
-            color: #222;
-            padding: 12px 18px;
-            margin: 4px 0;
-            border-radius: 18px 18px 18px 4px;
-            max-width: 80%;
-            margin-right: auto;
-            text-align: left;
-            font-size: 1.08em;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .input-bar {
-            position: absolute;
-            left: 0; right: 0; bottom: 0;
-            background: #fff;
-            padding: 18px 16px;
-            border-top: 1px solid #e0e0e0;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .input-bar input[type="text"] {
-            flex: 1;
-            padding: 12px;
-            border-radius: 16px;
-            border: 1px solid #ccc;
-            font-size: 1.08em;
-            outline: none;
-        }
-        .input-bar button {
-            background: #1976d2;
-            color: #fff;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 16px;
-            cursor: pointer;
-            font-size: 1.08em;
-            font-weight: 500;
-            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
-            transition: background 0.2s;
-        }
-        .input-bar button:hover {
-            background: #1565c0;
-        }
-        @media (max-width: 900px) {
-            .container {
-                max-width: 98vw;
-            }
-        }
-        @media (max-width: 600px) {
-            .container {
-                padding: 0;
-                min-height: 98vh;
-            }
-            .header {
-                font-size: 1.1em;
-                padding: 12px 0;
-            }
-            #chat-area {
-                padding: 12px 6px 80px 6px;
-            }
-            .input-bar input[type="text"] {
-                font-size: 1em;
-            }
-            .input-bar button {
-                font-size: 1em;
-                padding: 10px 18px;
-            }
-        }
-        @media (max-width: 400px) {
-            .container {
-                padding: 0;
-            }
-            .header {
-                font-size: 0.95em;
-            }
-        }
-    </style>
+    <title>Amharic Legal Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="sidebar">የሕግ አማካሪ ቻትቦት</div>
-    <div class="container">
-        <div id="chat-area">
+    <div class="sidebar">
+        <button onclick="startNewChat()">+ አዲስ ውይይት</button>
+        <h2>የታሪክ ውይይቶች</h2>
+        <ul>
+        {% if chat_previews %}
+            {% for preview in chat_previews %}
+            <li onclick="loadChat('{{ loop.index0 }}')">
+                {{ preview }}...
+            </li>
+            {% endfor %}
+        {% else %}
+            <li style="opacity:0.6">No saved chats yet</li>
+        {% endif %}
+        </ul>
+
+    </div>
+
+    <div class="main">
+        <div id="chat-area" class="chat-area">
             {% for msg in chat_history %}
                 {% if msg.role == 'user' %}
                     <div class="user-msg">{{ msg.text }}</div>
@@ -168,10 +33,12 @@
                 {% endif %}
             {% endfor %}
         </div>
-        <form method="post" class="input-bar">
-            <input type="text" name="query" placeholder="መልእክትዎን እዚህ ያስገቡ..." value="{{ query }}">
+        <form id="chat-form" class="input-bar">
+            <textarea id="chat-input" placeholder="መልእክትዎን እዚህ ያስገቡ..." rows="1"></textarea>
             <button type="submit">ላክ</button>
         </form>
     </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

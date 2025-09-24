@@ -1,0 +1,128 @@
+/* Container & layout */
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #ececf1;
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+.sidebar {
+  width: 250px;
+  background: #2d3748;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar h2 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+.sidebar button {
+  background: #4a5568;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+.sidebar li {
+  background: #4a5568;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+/* Main chat area */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.chat-area {
+  flex: 1;
+  padding: 20px 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* User and bot messages */
+.user-msg {
+  background: #3182ce;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 20px 20px 0 20px;
+  max-width: 70%;
+  align-self: flex-end;
+  text-align: right;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bot-msg {
+  background: #edf2f7;
+  color: black;
+  padding: 12px 18px;
+  border-radius: 20px 20px 20px 0;
+  max-width: 70%;
+  align-self: flex-start;
+  text-align: left;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Input bar */
+.input-bar {
+  display: flex;
+  padding: 12px;
+  background: white;
+  border-top: 1px solid #ccc;
+}
+.input-bar textarea {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  resize: none;
+  line-height: 1.4em;
+  max-height: 150px;
+  overflow-y: auto;
+}
+.input-bar button {
+  margin-left: 10px;
+  padding: 12px 22px;
+  border: none;
+  background: #3182ce;
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.2s;
+}
+.input-bar button:hover {
+  background: #2b6cb0;
+}
+
+/* Scrollbar styling */
+.chat-area::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-area::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+.chat-area::-webkit-scrollbar-track {
+  background: transparent;
+}
